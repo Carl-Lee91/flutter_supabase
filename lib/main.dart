@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_supabase/core/di/di_setup.dart';
+import 'package:flutter_supabase/features/todo/presentation/pages/todo_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+
+  configureDependencies();
 
   runApp(const MyApp());
 }
@@ -22,18 +26,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', home: const MyHomePage());
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(child: Text('Hello World')),
-    );
+    return MaterialApp(title: 'Flutter Demo', home: const TodoScreen());
   }
 }
